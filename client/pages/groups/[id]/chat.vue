@@ -7,7 +7,7 @@
         <div class="flex flex-col" v-if="group">
           {{ group.Title }} : {{ group.Description }}
           <div v-if="messagesList">
-            <div v-for="message in messagesList" :key="message.ID" class="text-sm font-medium space-y-6">
+            <div v-for="message in messagesList" :key="message.ID" class="text-sm font-medium m-3 space-y-6">
               <div>
                 <div v-if="message.SenderID === currentUser?.id" class="flex gap-2 flex-row-reverse items-end">
                   <img v-if="currentUser && currentUser.avatarImage"
@@ -24,8 +24,6 @@
                     {{ message.Content }}
                   </div>
                 </div>
-                <div class="bg-red-400">{{ message.Sender.nickname }}</div>
-                <div>{{ message.CreatedAt }}</div>
               </div>
             </div>
           </div>

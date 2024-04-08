@@ -1,5 +1,4 @@
 import { sendError, getSession, useSession } from 'h3'
-import { sessionUpdater } from '../../utils/sessionHandler'
 import { fetcher } from '../../utils/fetcher'
 
 export default defineEventHandler(async (event) => {
@@ -14,13 +13,9 @@ export default defineEventHandler(async (event) => {
     }
 
     const token = event.context.token
-    const session = await getSession(event, {
-        password: "5ec0312f-223f-4cc0-aa0f-303ff39fe1b2",
-        name: "server-store",
-        // generateId: () => { return '' }
-    })
 
-    if (session.data.sessionToken != token) {
+    
+    if (!token) {
         return sendError(event, createError({
             statusCode: 400,
             statusMessage: 'No user session available'
@@ -45,7 +40,7 @@ export default defineEventHandler(async (event) => {
             }
             
             const updateValue = {
-                email: session.data.userInfos.email,
+                email: event.context.user.email,
                 avatarImage: response.imageurl
             }
             console.log(updateValue)
@@ -66,9 +61,10 @@ export default defineEventHandler(async (event) => {
                     statusMessage: response3.message
                 }))
             }
-            const newUserAvatar = session.data.userInfos
+            const newUserAvatar = event.context.user
+            event.context.user.avatarImage = response.imageurl
             newUserAvatar.avatarImage = response.imageurl
-            await sessionUpdater(token, newUserAvatar, event)
+            
             return {imageurl: response.imageurl, message: "Avatar update successfully"}
         } catch (err) {
             console.log(err)
