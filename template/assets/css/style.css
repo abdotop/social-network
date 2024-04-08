@@ -1,0 +1,359 @@
+/* Convert the css code in the file to tailwind */
+
+@keyframes entranceBottom {
+  0% {
+      opacity: 0;
+      transform: translateY(5px)
+  }
+
+  to {
+      opacity: 1;
+      transform: translateY(0)
+  }
+}
+
+@keyframes entranceScale {
+  0% {
+      opacity: 0;
+      transform: scale(.97)
+  }
+
+  to {
+      opacity: 1;
+      transform: scale(1)
+  }
+}
+
+.page.landing .cell {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%
+}
+
+.page.landing .secondary-row .cell {
+  height: auto;
+  box-shadow: -1px 0 1px 0 var(--baseColor);
+  opacity: 0;
+  animation: entranceBottom .3s ease-out forwards
+}
+
+.page.landing .secondary-row .cell:nth-child(1) {
+  animation-delay: .15s
+}
+
+.page.landing .secondary-row .cell:nth-child(2) {
+  animation-delay: .3s
+}
+
+.page.landing .secondary-row .cell:nth-child(3) {
+  animation-delay: .45s
+}
+
+.page.landing .secondary-row .cell:nth-child(4) {
+  animation-delay: .6s
+}
+
+.page.landing .secondary-row .cell:nth-child(5) {
+  animation-delay: .75s
+}
+
+.page.landing .secondary-row .cell:first-child {
+  box-shadow: none
+}
+
+.page.landing .slider {
+  flex-direction: column;
+  display: flex;
+  height: auto;
+  justify-content: center;
+  padding: 100px var(--baseSpacing) var(--baseSpacing) var(--baseSpacing);
+  gap: var(--smSpacing);
+  animation: entranceScale .3s ease-out
+}
+
+.page.landing .slider .slider-screens {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: top;
+  max-height: 100%;
+  flex-shrink: 1;
+  border-radius: var(--baseRadius)
+}
+
+.page.landing .slider .slider-screens .slide {
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  transform-origin: top;
+  transition: margin var(--baseAnimationSpeed),opacity var(--baseAnimationSpeed),transform var(--baseAnimationSpeed)
+}
+
+.page.landing .slider .slider-screens .slide img {
+  max-height: 100%
+}
+
+.page.landing .slider .slider-screens .slide:nth-child(1) {
+  transform: translateY(-75px) scale(.8)
+}
+
+.page.landing .slider .slider-screens .slide:nth-child(2) {
+  transform: translateY(-50px) scale(.85)
+}
+
+.page.landing .slider .slider-screens .slide:nth-child(3) {
+  transform: translateY(-25px) scale(.9)
+}
+
+.page.landing .slider .slider-screens .slide:nth-child(4) {
+  transform: translateY(0) scale(.95)
+}
+
+.page.landing .slider .slider-screens .slide:last-child {
+  position: relative;
+  transform: scale(1);
+  transition: none
+}
+
+.page.landing .slider .slider-screens .slide:not(:last-child) {
+  cursor: pointer
+}
+
+.page.landing .slider .slider-screens .slide:not(:last-child):hover {
+  margin-top: -5px
+}
+
+.page.landing .slider .slider-screens .slide:not(:last-child):active {
+  margin-top: -10px
+}
+
+.page.landing .slider .slider-screens .slide.next-active {
+  z-index: 2;
+  transform: scale(1)
+}
+
+.page.landing .info {
+  position: relative;
+  z-index: 0;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: var(--baseSpacing) var(--baseSpacing) 0;
+  background: var(--accentAltColor) linear-gradient(to right,rgba(255,255,255,.2) 1px,transparent 1px);
+  background-size: 22.18%;
+  transition: background var(--baseAnimationSpeed)
+}
+
+.page.landing .info .content {
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 24px;
+  line-height: 34px;
+  padding: var(--lgSpacing) 0;
+  animation: entranceScale .3s ease-out
+}
+
+.page.landing .info .content .title {
+  line-height: 1.6em
+}
+
+.page.landing .info .content .ctrls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--smSpacing);
+  color: var(--txtHintColor);
+  margin-top: var(--baseSpacing)
+}
+
+.accent-block {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--smSpacing);
+  padding: 40px 40px 0;
+  text-align: center
+}
+
+.accent-block p {
+  margin: 5px 0
+}
+
+.accent-block .preview {
+  position: relative;
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-height: 0;
+  margin-top: var(--xsSpacing);
+  -webkit-user-select: none;
+  user-select: none;
+  height: 210px
+}
+
+.preview-integrations {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  align-items: flex-start
+}
+
+.preview-integrations .screenshot {
+  position: sticky;
+  left: 0;
+  right: 0
+}
+
+.preview-integrations .screenshot1 {
+  margin-top: 10px;
+  margin-right: -20px
+}
+
+.preview-integrations .screenshot2 {
+  margin-left: -20px
+}
+
+.preview-hotspots {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start
+}
+
+.preview-hotspots .hotspot {
+  --hotspotRGB: var(--successRGB);
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: 180px;
+  height: 60px;
+  margin: 5px 10px 0 0;
+  background: rgba(var(--hotspotRGB),.4);
+  border: 1px solid rgb(var(--hotspotRGB));
+  border-radius: var(--baseRadius)
+}
+
+.preview-hotspots .hotspot2 {
+  --hotspotRGB: var(--primaryRGB);
+  position: absolute;
+  top: 100%;
+  left: 15px;
+  width: 75%;
+  margin-top: 15px
+}
+
+.preview-comments .comment-wrapper {
+  position: relative;
+  display: inline-flex;
+  vertical-align: top;
+  justify-content: center
+}
+
+.preview-comments .screenshot1 {
+  position: sticky;
+  z-index: 1;
+  left: 10px;
+  margin-top: 30px
+}
+
+.preview-comments .comment-pin {
+  --pinSize: 28px;
+  position: sticky;
+  right: 10px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--pinSize);
+  height: var(--pinSize);
+  color: #fff;
+  background: var(--warningColor);
+  border-radius: 50% 3px 50% 50%;
+  flex-shrink: 0;
+  margin: 5px 0 0 10px;
+  box-shadow: 0 0 0 4px rgba(var(--warningRGB),.4)
+}
+
+@media screen and (max-height: 1150px) {
+  .page.landing .primary-row .slider {
+      height:520px;
+      align-self: center
+  }
+}
+
+@media screen and (max-height: 1050px) {
+  .page.landing .primary-row .slider {
+      height:400px
+  }
+}
+
+@media screen and (max-height: 950px) {
+  .page.landing .accent-block .preview {
+      height:100px;
+      margin-top: 0
+  }
+}
+
+@media screen and (max-height: 750px) {
+  .page.landing .primary-row .slider {
+      height:350px
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .page.landing .accent-block {
+      padding:var(--baseSpacing) var(--smSpacing) 0
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .page.landing {
+      height:auto;
+      max-height: none
+  }
+
+  .page.landing .secondary-row {
+      display: block;
+      height: auto;
+      border-top: 0
+  }
+
+  .page.landing .accent-block {
+      height: auto;
+      width: 100%;
+      padding: var(--baseSpacing);
+      overflow: hidden;
+      box-shadow: none;
+      border-top: 1px solid var(--baseColor)
+  }
+
+  .page.landing .accent-block .preview {
+      height: auto
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .page.landing .primary-row {
+      flex-direction:column;
+      align-items: flex-start
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .page.landing .primary-row .info {
+      text-align:center
+  }
+
+  .page.landing .primary-row .info .btn {
+      width: 100%
+  }
+}

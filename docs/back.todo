@@ -1,0 +1,103 @@
+1. **Modeling:**
+   - [ ] Review the project requirements and understand the data structures needed for the social network.
+   - [ ] Create a diagram to visualize the database structure.
+   - [ ] Define the tables, their columns, relationships, and constraints.
+   - [ ] Decide on the technologies to be used for the backend.
+
+2. **Setup Project Structure:**
+   - [ ] Create a new project directory for the backend.
+   - [ ] Initialize a Git repository for version control.
+   - [ ] Set up a Go project environment.
+
+3. **Database Setup:**
+   - [ ] Install package to connect golang to SQLite.
+   - [ ] Create a database file for development and for production.
+   - [ ] Set up the necessary database connections and configurations.
+
+4. **Migrations:**
+   - [ ] Install the migration tool (golang-migrate).
+   - [ ] Create migration files for each table defined in the database schema.
+   - [ ] Implement up and down migrations for each table to create and rollback changes.
+   - [ ] Test the migrations locally to ensure they work as expected.
+
+5. **Model Implementation:**
+   - [ ] Define Go structs for each table in the database schema.
+   - [ ] Implement functions/methods to interact with the database using SQL queries.
+   - [ ] Write unit tests for the database models to ensure proper functionality.
+
+6. **Authentication:**
+   - [ ] Implement user registration functionality.
+   - [ ] Implement user login functionality using sessions and cookies.
+   - [ ] Ensure passwords are securely hashed and stored in the database.
+   - [ ] Implement middleware for authentication and authorization checks.
+
+7. **Followers:**
+   - [ ] Design the logic for users to follow/unfollow each other.
+   - [ ] Implement endpoints to handle follow requests and responses.
+   - [ ] Implement logic to retrieve followers and following users for a given user.
+
+8. **Profile Management:**
+   - [ ] Implement CRUD operations for user profiles.
+   - [ ] Handle profile privacy settings (public/private).
+   - [ ] Design and implement endpoints for profile information retrieval and updates.
+
+9. **Posts:**
+   - [ ] Design the structure for creating, retrieving, updating, and deleting posts.
+   - [ ] Implement endpoints for post creation, retrieval, and modification.
+   - [ ] Handle privacy settings for posts (public/private).
+
+10. **Groups:**
+    - [ ] Design the logic for creating and managing groups.
+    - [ ] Implement endpoints for group creation, invitation, acceptance, and removal.
+    - [ ] Implement logic for users to join or leave groups.
+
+11. **Chats:**
+    - [ ] Design the chat system for private and group messaging.
+    - [ ] Implement WebSocket functionality for real-time communication.
+    - [ ] Handle message sending, receiving, and notifications.
+
+12. **Notifications:**
+    - [ ] Design the notification system for various events (e.g., follow requests, group invitations).
+    - [ ] Implement logic to generate and send notifications to users.
+    - [ ] Implement endpoints to retrieve and manage notifications.
+
+13. **Testing:**
+    - [ ] Write unit tests for each endpoint and functionality.
+    - [ ] Perform integration tests to ensure different components work together.
+    - [ ] Test error handling and edge cases thoroughly.
+
+14. **Documentation:**
+    - [ ] Document the API endpoints and their usage.
+    - [ ] Provide setup instructions and guidelines for developers.
+    - [ ] Document the database schema and migration process.
+
+15. **Deployment:**
+    - [ ] Prepare the backend application for deployment.
+    - [ ] Choose a deployment platform (e.g., Heroku, AWS).
+    - [ ] Configure environment variables and settings for production.
+    - [ ] Deploy the backend application and ensure it's accessible.
+
+16. **Monitoring and Maintenance:**
+    - [ ] Set up logging and monitoring for the backend application.
+    - [ ] Implement error tracking and reporting mechanisms.
+    - [ ] Plan for regular maintenance tasks and updates.
+
+17. **Security:**
+    - [ ] Implement measures to prevent common security vulnerabilities (e.g., SQL injection, XSS).
+    - [ ] Regularly review and update security configurations.
+    - [ ] Perform security audits and penetration testing periodically.
+
+18. **Performance Optimization:**
+    - [ ] Monitor and optimize database queries for performance.
+    - [ ] Implement caching mechanisms where applicable.
+    - [ ] Profile and optimize critical endpoints for speed and efficiency.
+
+19. **Scalability:**
+    - [ ] Design the backend application with scalability in mind.
+    - [ ] Plan for horizontal scaling options as the user base grows.
+    - [ ] Implement load testing to identify potential bottlenecks and areas for improvement.
+
+20. **Continuous Improvement:**
+    - [ ] Gather feedback from users and stakeholders to identify areas for improvement.
+    - [ ] Iterate on features based on user feedback and analytics.
+    - [ ] Regularly update dependencies and refactor code for maintainability.
