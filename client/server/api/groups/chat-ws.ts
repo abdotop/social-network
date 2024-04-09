@@ -37,7 +37,7 @@ export default defineWebSocketHandler({
     });
 
     peer.subscribe("chat" + groupId);
-    peer.publish("chat" + groupId, { Sender: { nickname: "server" }, Content: `${user.nickname} joined!` });
+    // peer.publish("chat" + groupId, { Sender: { nickname: "server" }, Content: `${user.nickname} joined!` });
   },
 
   async message(peer, message) {
@@ -104,7 +104,7 @@ export default defineWebSocketHandler({
       group.splice(index, 1);
     }
     groups.set(groupId, group);
-    peer.publish("chat" + groupId, { Sender: { nickname: "server" }, Content: `${peer.id} left!` });
+    // peer.publish("chat" + groupId, { Sender: { nickname: "server" }, Content: `${peer.id} left!` });
   },
 
   error(peer, error) {

@@ -18,8 +18,7 @@
                   </div>
                 </div>
                 <div v-else class="flex gap-3">
-                  <img :src="'http://localhost:8081/' + message.Sender.avatarImage"
-                    class="w-9 h-9 rounded-full shadow" />
+                  <img :src="'http://localhost:8081/' + message.Sender.avatarImage" class="w-9 h-9 rounded-full shadow" />
                   <div class="px-4 py-2 rounded-[20px] max-w-sm bg-secondery">
                     {{ message.Content }}
                   </div>
@@ -35,7 +34,7 @@
             </button>
             <div class="dropbar p-2"
               uk-drop="stretch: x; target: #message__wrap ;animation: uk-animation-scale-up uk-transform-origin-bottom-left ;animate-out: true; pos: top-left ; offset:2; mode: click ; duration: 200 ">
-    
+
               <div class="sm:w-60 bg-white shadow-lg border rounded-xl  pr-0 dark:border-slate-700 dark:bg-dark3">
                 <span class="text-sm font-semibold p-3 pb-0" style="display: flex;justify-content: space-evenly;">
                   <button @click="changeCategory(-1)"><i style="font-size: 20px;" class='bx bx-chevron-left'></i></button>
@@ -49,10 +48,10 @@
                     }}
                   </div>
                 </div>
-    
-    
+
+
               </div>
-    
+
             </div>
           </div>
           <u-input class="w-full" v-model="message" placeholder="Type your message..." @keydown.enter="send" />
@@ -168,8 +167,20 @@ const connect = async () => {
   log("ws", "Connected!");
 };
 
+
 onMounted(async () => {
   group.value = await getGroupByID(groupId)
+
+
+  if (group.value) {
+    const isMember = group.value?.GroupMembers.some(
+      (member) => member.User.id === userId
+    );
+    if (!isMember) {
+      navigateTo('/groups/' + groupId)
+      return
+    }
+  }
   await connect();
   const _messages = await getAllMessagesByGroup(groupId)
   if (_messages) {

@@ -130,6 +130,7 @@ func handleGetUser(ctx *octopus.Context) {
 				"following":     following,
 				"followStatus":  follower.Status,
 				"NumberOfPosts": numpost,
+				"isPublic":      user.IsPublic,
 			},
 		})
 	case "posts":

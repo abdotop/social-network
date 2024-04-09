@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     httpOnly: true,
     path: "/",
     sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
+    secure: false,
     expires: rememberMe
       ? new Date(Date.now() + config.cookieRememberMeExpires)
       : new Date(Date.now() + config.cookieExpires),

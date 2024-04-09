@@ -9,7 +9,7 @@
         <!-- cover -->
         <Cover :nickname="nickname" :data="data" />
 
-        <div v-if="data.followStatus == 'accepted'" class="flex items-center justify-between border-t border-gray-100 px-2 dark:border-slate-700">
+        <div v-if="(data.followStatus == 'accepted' && !data.isPublic) || data.isPublic" class="flex items-center justify-between border-t border-gray-100 px-2 dark:border-slate-700">
 
           <nav
             class="flex gap-0.5 rounded-xl overflow-hidden -mb-px text-gray-500 font-medium text-sm overflow-x-auto dark:text-white">
@@ -34,7 +34,7 @@
 
       </div>
 
-      <div v-if="data.followStatus == 'accepted'" class="flex 2xl:gap-12 gap-10 mb-8 max-lg:flex-col" id="js-oversized">
+      <div v-if="(data.followStatus == 'accepted' && !data.isPublic) || data.isPublic" class="flex 2xl:gap-12 gap-10 mb-8 max-lg:flex-col" id="js-oversized">
 
         <!-- feed story -->
         <div v-if="status === 'posts'">
@@ -72,7 +72,8 @@ export default {
         follow: "",
         following: "",
         avatar: "",
-        followStatus: ""
+        followStatus: "",
+        isPublic: true
       },
       nickname:"",
       status: "posts"

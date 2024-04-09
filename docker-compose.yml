@@ -10,8 +10,6 @@ services:
     restart: always
     networks:
       - mynetwork
-    environment:
-      - DATABASE_URL=/pkg/db/sqlite/social-network.db
 
   frontend:
     build:

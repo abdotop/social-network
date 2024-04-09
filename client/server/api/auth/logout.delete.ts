@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   }
   
   const token = event.context.token;
-  const response = await $fetch<ServerResponse<{}>>(`${process.env.BACKEND_URL}`+"/logout", {
+  const response = await $fetch<ServerResponse<{}>>(`${process.env.BACKEND_URL}` + "/logout", {
     method: "DELETE",
     headers: {
       Accept: "application/json",
@@ -20,16 +20,20 @@ export default defineEventHandler(async (event) => {
       Authorization: `Bearer ${token}`,
     },
   });
-
-  deleteCookie(event, config.cookieName, {
-    httpOnly: true,
-    path: "/",
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
-  });
+  await logout(token, event, config);
   await sessionDeleter(event)
 
   return {
     user: {},
   };
 });
+
+export async function logout(token: any, event: any, config: any) {
+
+  deleteCookie(event, config.cookieName, {
+    httpOnly: true,
+    path: "/",
+    sameSite: "strict",
+    secure: false,
+  });
+}

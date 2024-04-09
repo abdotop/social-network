@@ -1,6 +1,7 @@
 
 export default defineEventHandler(async (event) => {
     const token = event.context.token;
+    console.log(token)
     if (!token) {
         return {
             status: 401,
@@ -22,6 +23,9 @@ export default defineEventHandler(async (event) => {
             body: 'Internal server error',
         };
     });
+
+    console.log(response)
+
 
 if (response.status !== 200) {
     return {

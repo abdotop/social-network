@@ -82,6 +82,7 @@ func (follower *Follower) Get(db *sql.DB, reverse ...bool) error {
 		&follower.CreatedAt,
 		&follower.UpdatedAt,
 	)
+
 	if err != nil {
 		return fmt.Errorf("unable to execute the query. %v", err)
 	}
@@ -164,8 +165,6 @@ func (followers *Followers) GetAllByFolloweeID(db *sql.DB, followeeID uuid.UUID)
 
 	return nil
 }
-
-
 
 // count all followers by followee id
 func (followers *Followers) CountAllByFolloweeID(db *sql.DB, followeeID uuid.UUID) int {

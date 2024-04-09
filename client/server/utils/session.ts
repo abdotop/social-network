@@ -12,6 +12,8 @@ export async function getUserFromToken(event: H3Event | string) {
     cookie = event;
   }
 
+  console.log("tooooooooken\n", cookie);
+
   const unsignedToken = unsign(cookie, config.cookieSecret);
   if (!unsignedToken) return { user: null, token: null };
 
@@ -26,14 +28,17 @@ export async function getUserFromToken(event: H3Event | string) {
         Authorization: `Bearer ${token.session}`,
       },
     });
+    console.log("okkk kk tooooooooken\n",token,"//", cookie);
     return { user: JSON.parse(response as string) as User, token: token.session };
   } catch (error) {
+    console.log(error);
+    
     if (typeof event !== "string") {
       deleteCookie(event, config.cookieName, {
         httpOnly: true,
         path: "/",
         sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+        secure: false,
       });
     }
     return { user: null, token: null };
