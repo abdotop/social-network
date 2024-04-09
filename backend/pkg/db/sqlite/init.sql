@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS posts (
     deleted_at TIMESTAMP
 );
 
+
 -- Groups Table
 CREATE TABLE IF NOT EXISTS groups (
     id UUID PRIMARY KEY,
@@ -98,7 +99,6 @@ CREATE TABLE IF NOT EXISTS events_participants (
     deleted_at TIMESTAMP
 );
 
-
 -- Private Messages Table
 CREATE TABLE IF NOT EXISTS private_messages (
     id UUID PRIMARY KEY,
@@ -125,7 +125,10 @@ CREATE TABLE IF NOT EXISTS group_messages (
 CREATE TABLE IF NOT EXISTS notifications (
     id UUID PRIMARY KEY,
     user_id UUID REFERENCES users(id),
+    group_id UUID,
     concern_id UUID,
+    member_id UUID,
+    is_invite BOOLEAN DEFAULT FALSE,
     type TEXT CHECK(type = 'follow_request'OR type = 'follow_accepted' OR type = 'follow_declined' OR type = 'unfollow' OR type = 'group_invitation' OR type = 'new_message' OR type = 'new_event'),
     message TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -147,8 +150,19 @@ CREATE TABLE comments (
 -- Posts Selected Users Table
 CREATE TABLE selected_users (
     id UUID PRIMARY KEY,
-    user_id UUID REFERENCES user(id),
+    user_id UUID REFERENCES users(id),
     post_id UUID REFERENCES posts(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP
+);
+
+-- Invitations Table
+CREATE TABLE IF NOT EXISTS invitations (
+    id UUID PRIMARY KEY,
+    inviting_user_id UUID REFERENCES users(id),
+    invited_user_id UUID REFERENCES users(id),
+    group_member_id UUID REFERENCES group_members(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP
@@ -162,13 +176,6 @@ CREATE TABLE sessions (
     expiration_date TIMESTAMP,
     deleted_at TIMESTAMP
 );
-
--- INSERT INTO notifications (id, user_id) VALUES ();
-id UUID PRIMARY KEY,
-user_id UUID REFERENCES users(id),
-concern_id UUID,
-type TEXT CHECK(type = 'follow_request'OR type = 'follow_accepted' OR type = 'follow_declined' OR type = 'unfollow' OR type = 'group_invitation' OR type = 'new_message' OR type = 'new_event'),
-message TEXT,
 
 -- Populate the database
 INSERT INTO users (id, email, password, first_name, last_name, date_of_birth, avatar_image, nickname, about_me, is_public) VALUES 
@@ -190,7 +197,7 @@ INSERT INTO followers (id, follower_id, followee_id, status) VALUES
 ('945206d2-1f56-445a-a064-11f4f8921a11', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', '498e640d-78d2-4171-b060-369d75c380ed', 'accepted'),
 ('36acbd44-8c34-4357-a945-52695ab31f48', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', '36db745b-c07c-492c-bfd8-aaec63aa6fd7', 'declined'), 
 ('bc4c42df-839c-44fa-8aae-b227ab64ed7f', '498e640d-78d2-4171-b060-369d75c380ed', 'c035df0d-8699-4880-a79e-1291915f70a9', 'requested'), 
-('3b8dfc8c-4982-430f-abb4-7e95c809ad80', '498e640d-78d2-4171-b060-369d75c380ed', '36db745b-c07c-492c-bfd8-aaec63aa6fd7', 'accepted');
+('3b8dfc8c-4982-429f-abb4-7e95c809ad80', '498e640d-78d2-4171-b060-369d75c380ed', '36db745b-c07c-492c-bfd8-aaec63aa6fd7', 'accepted');
 
 
 INSERT INTO posts (id, user_id, title, content, image_url, privacy) VALUES
@@ -198,7 +205,7 @@ INSERT INTO posts (id, user_id, title, content, image_url, privacy) VALUES
 ('8d91cc06-6847-484e-90d7-d19784a84a4a', 'c035df0d-8699-4880-a79e-1291915f70a9', 'post 02', 'Here another one to just populate again the database', 'uploads/b5a53ab198e4fc283d4666e8964ec772.jpg', 'private'), 
 ('9b77a08a-ff18-4022-97c7-4dc8f1a53230', '498e640d-78d2-4171-b060-369d75c380ed', 'posting more', 'At the end of the program, not only did I manage to catch up on my math skills, but I also discovered a new passion for this subject. I feel much more confident in my abilities, and my academic performance has improved significantly. I am grateful to all the teachers and organizers of this program for changing my perspective on mathematics and giving me the tools to succeed. I highly recommend this program to anyone who struggles with math or is looking to deepen their understanding of the subject.', '', 'almost private'),
 ('aec2952f-fa1c-4065-9e23-f660819ac4ff', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'Apple Could Launch Its Most Important Product Since the iPhone This Summer, According to a Pair of Wall Street Analysts', 'Apple (NASDAQ: AAPL) could use a new blockbuster product, and it could come as soon as this summer.
-The iPhone maker saw sales rise just 2% last quarter after a year in which revenue fell 2.8%. China remains a big question mark for Apple following a government ban of iPhones and a report indicating a massive decline in sales in the country to start the year. Meanwhile, the varying sources of its high-margin services revenue remain the focus of regulators around the world.
+The iPhone maker saw sales rise just 3% last quarter after a year in which revenue fell 2.8%. China remains a big question mark for Apple following a government ban of iPhones and a report indicating a massive decline in sales in the country to start the year. Meanwhile, the varying sources of its high-margin services revenue remain the focus of regulators around the world.
 But at least two Wall Street analysts think Apple will release the next product to set off a spurt of growth at the massive company this summer. Melius Research analysts Ben Reitzes and Nick Monroe think investors should focus on what Apple will announce this summer at its annual Worldwide Developers Conference (WWDC).', 'uploads/05cb0f8594f61c5ad105f46f0d55dde7.webp', 'public'),
 ('9261e424-efd1-404c-96c8-76e9117d0606', '498e640d-78d2-4171-b060-369d75c380ed', 'India’s Quest for Building a Formidable Military-Industrial Complex', 'Rajnath Singh, the Defence Minister of India and the chief guest at the inaugural session of Firstpost Defence Summit held in New Delhi in Feb 2024, said India had to step out of its comfort zone to join the list of world’s top 25 arms exporters and Prime Minister Narendra Modi was focusing on long-term gains. India has exported Dornier-228s, 155 mm Advanced Towed Artillery Guns, Brahmos Missiles and Akash Missile System, while six countries are in talks to buy HAL’s indigenously manufactured light combat aircraft Tejas. “The aim is to manufacture high-end systems like aero-engines and gas turbines in India in the next five years,” he added. Rajnath Singh further said that the Modi Government is the first to halt the import of weapons to promote self-reliance. “We have made sure that our army uses indigenous resources and we even took a step forward to export these arms and equipment." 
 According to Business Today, India’s arms exports touched Rs 16,000 crore in the 2022-23 financial year. Over 100 Indian companies are currently exporting defence equipment to over 85 nations. “Our target is to increase exports to Rs 35,000 crore in the next two years,” T Natarajan, Additional Secretary, Department of Defence Production was quoted as saying during June 2023. However, there are substantial hurdles in the way of India achieving its goal of Rs 35,000 crore worth of arms exports by 2025. For example, there is an over-reliance on exports of parts and components, rather than major defence equipment or the very few indigenously built platforms by India. Besides, some of Indian defence equipment exports, especially local military platforms like Dhruv Advanced Light helicopters (ALH) exported to Ecuador, were afflicted by problems of quality control as per reports.
@@ -326,7 +333,61 @@ INSERT INTO group_messages (id, group_id, sender_id, content) VALUES
 ('6fc22ba9-22ed-41d5-b697-4850715df1f0', '9c206815-391a-434b-8d36-15fb3df4dffd', '36db745b-c07c-492c-bfd8-aaec63aa6fd7', 'Hello There ...');
 
 INSERT INTO comments (id, user_id, post_id, content, image_url) VALUES
-('98cb3c47-056a-4b15-8a89-8fc89c547aae', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', '9b77a08a-ff18-4022-97c7-4dc8f1a53230', 'Great Man, keep doing the good job!', '');
+('98cb3c47-056a-4b15-8a89-8fc89c547aae', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', '3e8958e6-b6ac-4eea-ab67-2fe811211978', 'Great Man, keep doing the good job!', 'uploads/default-avatar.png'),
+('a018d89f-9a89-4f8e-8b42-8ad861e42664', 'c035df0d-8699-4880-a79e-1291915f70a9', 'aec2952f-fa1c-4065-9e23-f660819ac4ff', 'Great Man, keep doing the good job!', ''),
+('e5aaa81b-33ae-4e8d-bf04-daf9687440ff', '498e640d-78d2-4171-b060-369d75c380ed', '3e8958e6-b6ac-4eea-ab67-2fe811211978', 'Great Man, keep doing the good job!', 'uploads/default-avatar.png'),
+('8fd66b1a-53fd-4204-aeb4-dced6439ce71', '498e640d-78d2-4171-b060-369d75c380ed', 'cead0563-0215-427f-aca3-fea64be1130a', 'Great Man, keep doing the good job!', ''),
+('c80f2e97-0368-42ba-a6ab-b850f041f1bc', '4f6f09ab-a290-4a38-9f70-9f61c2fd6e75', '163fd188-e128-41f2-b3d7-0a3e95cb8dae', 'Great Man, keep doing the good job!', 'uploads/default-avatar.png');
 
 INSERT INTO selected_users (id, user_id, post_id) VALUES
-('2d00d01a-1882-41a1-97c0-58492472ea87', '498e640d-78d2-4171-b060-369d75c380ed', '9b77a08a-ff18-4022-97c7-4dc8f1a53230');
+('2d00d01a-1882-41a1-97c0-58492472ea87', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', '9b77a08a-ff18-4022-97c7-4dc8f1a53230');
+
+INSERT INTO notifications (id, user_id, concern_id, type) VALUES
+('f5b43f4b-bdc6-4539-a0dd-d7ac218cc6a7', 'c035df0d-8699-4880-a79e-1291915f70a9', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'follow_request'),
+('5255e83c-4bfe-4933-8fb6-781bae6fd335', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', '498e640d-78d2-4171-b060-369d75c380ed', 'follow_accepted'),
+('ce86e08a-4fdd-4a05-bfde-16acf40360c8', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', '36db745b-c07c-492c-bfd8-aaec63aa6fd7', 'follow_declined'),
+('0ebc6e97-98f7-47b0-8754-750f7efe5d73', '498e640d-78d2-4171-b060-369d75c380ed', 'c035df0d-8699-4880-a79e-1291915f70a9', 'follow_request'),
+('52806c1c-b194-4bef-a9cb-ce988e45820b', '498e640d-78d2-4171-b060-369d75c380ed', '36db745b-c07c-492c-bfd8-aaec63aa6fd7', 'follow_accepted'),
+('db7a144b-c6c2-49c6-bdcf-cd5044a983fe', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'aa518af7-d623-4f5b-8bb6-bd7405862110', 'new_event'),
+('d38a4335-fa20-4f32-b0b6-83db702ad747', '498e640d-78d2-4171-b060-369d75c380ed', '4c2c37cf-1d5a-4077-adc3-1687d852a570', 'new_event'),
+('a018d89f-9a89-4f8e-8b42-8ad861e42664', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', '4c2c37cf-1d5a-4077-adc3-1687d852a570', 'new_event'),
+('e5aaa81b-33ae-4e8d-bf04-daf9687440ff', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'c035df0d-8699-4880-a79e-1291915f70a9', 'new_message'),
+('8fd66b1a-53fd-4204-aeb4-dced6439ce71', 'c035df0d-8699-4880-a79e-1291915f70a9', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'new_message'),
+('c80f2e97-0368-42ba-a6ab-b850f041f1bc', 'c035df0d-8699-4880-a79e-1291915f70a9', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'new_message'),
+('d28212f7-bb4b-48d5-a719-d786963affb2', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', '498e640d-78d2-4171-b060-369d75c380ed', 'new_message'),
+('517a1a87-15b1-4202-8711-c44aae95cf37', '498e640d-78d2-4171-b060-369d75c380ed', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'new_message'),
+('2030d28a-8b3f-42ed-a8d8-b4d10445c683', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', '498e640d-78d2-4171-b060-369d75c380ed', 'new_message');
+-- (),
+-- (),
+-- (),
+-- (),
+-- (),
+-- ();
+-- type TEXT CHECK(type = 'follow_request'OR type = 'follow_accepted' OR type = 'follow_declined' OR type = 'unfollow' OR type = 'group_invitation' OR type = 'new_message' OR type = 'new_event'),
+
+-- INSERT INTO group_messages (id, group_id, sender_id, content) VALUES
+-- ('aaae83f2-3095-4e1c-b537-73bc36c94ae1', 'aa518af7-d623-4f5b-8bb6-bd7405862110', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'Welcome to the Group. Do a brief presentation and what make you joined the group.'),
+-- ('d365cd27-ff23-4c3f-ba4f-173d7ad35b22', 'aa518af7-d623-4f5b-8bb6-bd7405862110', 'c035df0d-8699-4880-a79e-1291915f70a9', 'Hi im tester2 i think, and i am here as a tester for social network feature. lol'),
+-- ('dc660cca-ca64-4829-ba92-7eca94a9a966', '4c2c37cf-1d5a-4077-adc3-1687d852a570', '498e640d-78d2-4171-b060-369d75c380ed', 'This is the group official chat'),
+-- ('fabb94b7-87a4-464e-8913-c220130349d1', '4c2c37cf-1d5a-4077-adc3-1687d852a570', '498e640d-78d2-4171-b060-369d75c380ed', 'welcome onboard ...'),
+-- ('b19bcc7c-8288-4362-b729-e80903adb783', '4c2c37cf-1d5a-4077-adc3-1687d852a570', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'Thank for the introcduction'),
+-- ('2896d78f-61ea-414c-9329-412971d0663e', '4c2c37cf-1d5a-4077-adc3-1687d852a570', 'c035df0d-8699-4880-a79e-1291915f70a9', 'Glad to be here'),
+-- ('fbd251b8-4091-416d-9e28-cd915e215d08', '4c2c37cf-1d5a-4077-adc3-1687d852a570', '498e640d-78d2-4171-b060-369d75c380ed', 'Great guys, lets do it'),
+-- ('6fc22ba9-22ed-41d5-b697-4850715df1f0', '9c206815-391a-434b-8d36-15fb3df4dffd', '36db745b-c07c-492c-bfd8-aaec63aa6fd7', 'Hello There ...');
+
+-- INSERT INTO group_members (id, group_id, member_id, status, role) VALUES
+-- ('b6ca25c0-5bb7-43eb-b1dd-1be075afe6e2', 'aa518af7-d623-4f5b-8bb6-bd7405862110', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'accepted', 'admin'),
+-- ('26e64b28-0497-4f08-b3cf-db625a37b729', 'aa518af7-d623-4f5b-8bb6-bd7405862110', 'c035df0d-8699-4880-a79e-1291915f70a9', 'requesting', 'user'),
+-- ('f748b8d5-2f9e-4b5e-a272-9e47c3ecec73', '4c2c37cf-1d5a-4077-adc3-1687d852a570', '498e640d-78d2-4171-b060-369d75c380ed', 'accepted', 'admin'),
+-- ('56832149-f056-4f34-afb4-4b4ab134dbe9', '4c2c37cf-1d5a-4077-adc3-1687d852a570', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'accepted', 'user'),
+-- ('8fd09b61-1152-4f05-a6a5-2ec538ae394e', '4c2c37cf-1d5a-4077-adc3-1687d852a570', 'c035df0d-8699-4880-a79e-1291915f70a9', 'invited', 'user'),
+-- ('2f724f35-3648-4fea-84df-be12999ca83b', '9c206815-391a-434b-8d36-15fb3df4dffd', '36db745b-c07c-492c-bfd8-aaec63aa6fd7', 'accepted', 'admin'),
+-- ('cc541aa3-99dd-48d1-acd4-864c6716abfd', '4c2c37cf-1d5a-4077-adc3-1687d852a570', '36db745b-c07c-492c-bfd8-aaec63aa6fd7', 'declined', 'user');
+
+-- INSERT INTO events_participants (id, event_id, member_id, response) VALUES
+-- ('0d1ad730-ef02-4ecb-9e4d-2c070183f26f', '6e07c132-6490-4c20-a5eb-87bec6717732', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'going'),
+-- ('077e4b39-94b9-4daa-ac67-4ffe6fb2950c', '6e07c132-6490-4c20-a5eb-87bec6717732', 'c035df0d-8699-4880-a79e-1291915f70a9', 'not_going'),
+-- ('90042b0a-2310-4931-b35d-594e244f3c9c', 'a4515c02-8a5e-450a-adf5-83562eeef13c', '498e640d-78d2-4171-b060-369d75c380ed', 'going'),
+-- ('c76d37b7-a46f-4fcf-8696-319c4fa41e01', 'a4515c02-8a5e-450a-adf5-83562eeef13c', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'not_going'),
+-- ('24108e9f-9dee-48fd-abe8-86c58b9a3ea1', '5bc4cc82-9713-4b9c-b31a-34505a218a7e', 'c035df0d-8699-4880-a79e-1291915f70a9', 'going'),
+-- ('85374be0-f0b4-4213-8b4f-2b445f7a2424', '5bc4cc82-9713-4b9c-b31a-34505a218a7e', 'a7ce8bfb-d026-4d5b-9c99-0d4c736c1232', 'not_going');
