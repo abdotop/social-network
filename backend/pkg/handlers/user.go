@@ -32,7 +32,7 @@ func handleUpdateUser(ctx *octopus.Context) {
 		return
 	}
 	user.ID = userId
-	if err := user.Validate(); err != nil {
+	if err := user.Validate(ctx.Db.Conn); err != nil {
 		ctx.Status(http.StatusBadRequest).JSON(map[string]interface{}{
 			"message": err.Error(),
 			"status":  http.StatusBadRequest,
@@ -166,7 +166,7 @@ func handleUpdateUserInfos(ctx *octopus.Context) {
 		return
 	}
 	user.ID = userId
-	if err := user.Validate(); err != nil {
+	if err := user.Validate(ctx.Db.Conn); err != nil {
 		ctx.Status(http.StatusBadRequest).JSON(map[string]interface{}{
 			"message": err.Error(),
 			"status":  http.StatusBadRequest,

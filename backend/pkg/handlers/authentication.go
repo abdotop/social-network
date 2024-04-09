@@ -120,7 +120,7 @@ var registrationHandler = func(ctx *octopus.Context) {
 		return
 	}
 
-	err := newUser.Validate()
+	err := newUser.Validate(ctx.Db.Conn)
 	if err != nil {
 		ctx.Status(http.StatusBadRequest).JSON(map[string]interface{}{
 			"session": "",

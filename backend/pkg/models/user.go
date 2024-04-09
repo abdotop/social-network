@@ -33,7 +33,7 @@ type User struct {
 	DeletedAt   sql.NullTime `json:"deletedAt"`
 }
 
-func (u *User) Validate() error {
+func (u *User) Validate(db *sql.DB) error {
 	requiredFields := []string{"Email", "Password", "FirstName", "LastName", "DateOfBirth"}
 
 	v := reflect.ValueOf(u).Elem()
@@ -59,6 +59,18 @@ func (u *User) Validate() error {
 
 	if u.Nickname == "" {
 		u.Nickname = uuid.NewString()
+	} else {
+		query := `SELECT COUNT(*) FROM users WHERE nickname = $1`
+		var count int
+		row := db.QueryRow(query, u.Nickname)
+		err := row.Scan(&count)
+		if err != nil {
+			return fmt.Errorf("unable to query from database: ", err)
+		}
+
+		if count > 0 {
+			return errors.New("Nickname already used.")
+		}
 	}
 
 	return nil
